@@ -18,6 +18,8 @@ public struct PepeLogger {
     /// on the console.
     var writer: Writer
     
+    let lock = NSLock()
+    
     init() {
         modifiers = [.pepe]
         writer = .console
@@ -28,6 +30,10 @@ public struct PepeLogger {
     ///   - message: Message to be logged.
     ///   - level: Inidicates how important this message is.
     public func log(_ message: String, level: LogLevel = .info) {
+        _log(message, level: level)
+    }
+    
+    private func _log(_ message: String, level: LogLevel) {
         var message = message
         modifiers.reversed().forEach {
             message = $0.modify(message, level: level)
