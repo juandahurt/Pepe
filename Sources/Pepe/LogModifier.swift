@@ -10,7 +10,12 @@ import Foundation
 /// A log modifier modifies a message before logging it.
 ///
 /// You can have your own custom modifier by implmenting this class.
-public class LogModifier {
+public class LogModifier: Equatable {
+    /// Modifier identifier.
+    var id: String {
+        String(describing: Self.self)
+    }
+    
     /// Modifier that adds the log level to the message.
     static var level: LevelModifier {
         LevelModifier()
@@ -32,6 +37,10 @@ public class LogModifier {
     ///   - level: Log level.
     func modify(_ message: String, level: LogLevel) -> String {
         message
+    }
+    
+    public static func == (lhs: LogModifier, rhs: LogModifier) -> Bool {
+        lhs.id == rhs.id
     }
 }
 
