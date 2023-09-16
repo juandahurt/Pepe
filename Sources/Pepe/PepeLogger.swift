@@ -18,8 +18,6 @@ public struct PepeLogger {
     /// on the console.
     var writer: Writer
     
-    let lock = NSLock()
-    
     init() {
         modifiers = [.pepe]
         writer = .console
