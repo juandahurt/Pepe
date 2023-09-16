@@ -12,15 +12,26 @@ import os
 public struct PepeLogger {
     /// A set of modifiers to be apllied to every log message.
     /// Notice that, is you set an empty array, the logged string will be the one that you provide.
-    var modifiers: [LogModifier]
+    public var modifiers: [LogModifier]
     
     /// Indicates how the message will be logged or "written". By default, the messages will be logged
     /// on the console.
-    var writer: Writer
+    public var writer: Writer
+    
+    /// How the log operation will be executed.
+    public var executionType: ExecutionType
+    
+    /// Internal property to allow syncronous execution.
+    private let _lock = NSRecursiveLock()
+    
+    public enum ExecutionType: Equatable {
+        case async(DispatchQueue), sync
+    }
     
     init() {
         modifiers = [.pepe]
         writer = .console
+        executionType = .sync
     }
     
     /// Logs a message using the previously specified writer.
@@ -28,32 +39,22 @@ public struct PepeLogger {
     ///   - message: Message to be logged.
     ///   - level: Inidicates how important this message is.
     public func log(_ message: String, level: LogLevel = .info) {
-        _log(message, level: level)
+        switch executionType {
+        case .async(let dispatchQueue):
+            dispatchQueue.async {
+                _log(message, level: level)
+            }
+        case .sync:
+            _lock.lock(); defer { _lock.unlock() }
+            _log(message, level: level)
+        }
     }
     
     private func _log(_ message: String, level: LogLevel) {
-        var message = message
+        var log = Log(message: message, level: level)
         modifiers.reversed().forEach {
-            message = $0.modify(message, level: level)
+            $0.modify(&log)
         }
-        writer.write(message: message)
-    }
-}
-
-/// Indicates how important a message is.
-public enum LogLevel {
-    case info, debug, warning, error
-    
-    var description: String {
-        switch self {
-        case .info:
-            return "INFO"
-        case .debug:
-            return "DEBUG"
-        case .warning:
-            return "WARNING"
-        case .error:
-            return "ERROR"
-        }
+        writer.write(message: log.message)
     }
 }

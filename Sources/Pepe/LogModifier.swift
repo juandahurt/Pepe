@@ -33,11 +33,8 @@ public class LogModifier: Equatable {
     
     /// Modifies a certain massage.
     /// - Parameters:
-    ///   - message: Message to be modified.
-    ///   - level: Log level.
-    func modify(_ message: String, level: LogLevel) -> String {
-        message
-    }
+    ///   - log: Message to be modified.
+    func modify(_ log: inout Log) {}
     
     public static func == (lhs: LogModifier, rhs: LogModifier) -> Bool {
         lhs.id == rhs.id
@@ -46,24 +43,23 @@ public class LogModifier: Equatable {
 
 // MARK: - Hi modifier
 public class PepeModifier: LogModifier {
-    override func modify(_ message: String, level: LogLevel) -> String {
-        "🐸: \(message)"
+    override func modify(_ log: inout Log) {
+        log.message = "🐸: \(log.message)"
     }
 }
 
 // MARK: - Level modifier
 public class LevelModifier: LogModifier {
-    override func modify(_ message: String, level: LogLevel) -> String {
-        "[\(level.description)] \(message)"
+    override func modify(_ log: inout Log) {
+        log.message = "[\(log.level.description)] \(log.message)"
     }
 }
 
 // MARK: - Time modifier
 public class TimeModifier: LogModifier {
-    override func modify(_ message: String, level: LogLevel) -> String {
-        let now = Date()
+    override func modify(_ log: inout Log) {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss.SSSS"
-        return formatter.string(from: now).appending(" \(message)")
+        log.message = formatter.string(from: log.date).appending(" \(log.message)")
     }
 }
