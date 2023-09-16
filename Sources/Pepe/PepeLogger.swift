@@ -14,8 +14,13 @@ public struct PepeLogger {
     /// Notice that, is you set an empty array, the logged string will be the one that you provide.
     var modifiers: [LogModifier]
     
+    /// Indicates how the message will be logged or "written". By default, the messages will be logged
+    /// on the console.
+    var writer: Writer
+    
     init() {
         modifiers = [.pepe]
+        writer = .console
     }
     
     /// Logs a message using the previously specified writer.
@@ -27,8 +32,7 @@ public struct PepeLogger {
         modifiers.reversed().forEach {
             message = $0.modify(message, level: level)
         }
-        // TODO: implement writers
-        print(message)
+        writer.write(message: message)
     }
 }
 
