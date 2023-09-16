@@ -1,0 +1,32 @@
+{
+  "configurations" : [
+    {
+      "id" : "6192FF30-10FA-48B4-99EA-8DA67CA00FF5",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:",
+          "identifier" : "Pepe",
+          "name" : "Pepe"
+        }
+      ]
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "PepeTests",
+        "name" : "PepeTests"
+      }
+    }
+  ],
+  "version" : 1
+}
