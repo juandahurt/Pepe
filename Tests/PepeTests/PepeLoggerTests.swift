@@ -13,5 +13,7 @@ final class PepeLoggerTests: XCTestCase {
         let logger = Pepe.loggerPlease()
         XCTAssertEqual(logger.modifiers, [.pepe])
         XCTAssertEqual(logger.writer, .console)
+        XCTAssertEqual(logger.executionType, .sync)
+    }
     }
 }
