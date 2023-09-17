@@ -17,19 +17,16 @@ public class LogModifier: Equatable {
     }
     
     /// Modifier that adds the log level to the message.
-    static var level: LevelModifier {
-        LevelModifier()
-    }
+    static let level = LevelModifier()
     
     /// Modifier that adds the current time to the message.
-    static var time: TimeModifier {
-        TimeModifier()
-    }
+    static let time = TimeModifier()
     
     /// The default modifier.
-    static var pepe: PepeModifier {
-        PepeModifier()
-    }
+    static let pepe = PepeModifier()
+    
+    /// Modifier that adds the file from where the log was called.
+    static let file = FileModifier()
     
     /// Modifies a certain massage.
     /// - Parameters:
@@ -61,5 +58,33 @@ public class TimeModifier: LogModifier {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss.SSSS"
         log.message = formatter.string(from: log.date).appending(" \(log.message)")
+    }
+}
+
+// MARK: - File modifier
+public class FileModifier: LogModifier {
+    private var _showExtension = true
+    private var _showLine = false
+    
+    /// Removes the file extension.
+    public func withoutExtension() -> Self {
+        _showExtension = false
+        return self
+    }
+    
+    /// Shows the line from which the log was called.
+    public func withLine() -> Self {
+        _showLine = true
+        return self
+    }
+    
+    override func modify(_ log: inout Log) {
+        guard var url = URL(string: log.file) else { return }
+        if !_showExtension { url.deletePathExtension() }
+        var fileName = url.lastPathComponent
+        if _showLine {
+            fileName.append(":\(log.line)")
+        }
+        log.message = "\(fileName) \(log.message)"
     }
 }

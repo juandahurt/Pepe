@@ -17,9 +17,14 @@ final class PepeLoggerTests: XCTestCase {
     }
     
     func testLogging_withHeavyConfig_shouldExecuteWithReasonableTime() {
-        let reasonableTime = 0.5
+        let reasonableTime = 0.1
         var logger = Pepe.loggerPlease()
-        logger.modifiers = [.pepe, .level, .time]
+        logger.modifiers = [
+            .pepe,
+            .file.withLine(),
+            .level,
+            .time
+        ]
         logger.writer = .os(subsystem: "pepe", category: "perf_test")
         let start = Date()
         logger.log("message")

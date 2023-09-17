@@ -10,15 +10,25 @@ import Foundation
 struct Log {
     /// Message to be logged.
     var message: String
+    
     /// How importante the log is.
     let level: LogLevel
+    
     /// The time when the message is logged.
     let date: Date
     
-    init(message: String, level: LogLevel) {
+    /// The file from where the log was called.
+    let file: String
+    
+    /// The line from which the log was called.
+    let line: Int
+    
+    init(message: String, level: LogLevel, file: String, line: Int) {
         self.message = message
         self.level = level
         self.date = Date()
+        self.file = file
+        self.line = line
     }
 }
 
