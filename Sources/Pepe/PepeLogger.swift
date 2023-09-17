@@ -38,20 +38,20 @@ public struct PepeLogger {
     /// - Parameters:
     ///   - message: Message to be logged.
     ///   - level: Inidicates how important this message is.
-    public func log(_ message: String, level: LogLevel = .info) {
+    public func log(_ message: String, level: LogLevel = .info, file: String = #file, line: Int = #line) {
         switch executionType {
         case .async(let dispatchQueue):
             dispatchQueue.async {
-                _log(message, level: level)
+                _log(message, level: level, file: file, line: line)
             }
         case .sync:
             _lock.lock(); defer { _lock.unlock() }
-            _log(message, level: level)
+            _log(message, level: level, file: file, line: line)
         }
     }
     
-    private func _log(_ message: String, level: LogLevel) {
-        var log = Log(message: message, level: level)
+    private func _log(_ message: String, level: LogLevel, file: String, line: Int) {
+        var log = Log(message: message, level: level, file: file, line: line)
         modifiers.reversed().forEach {
             $0.modify(&log)
         }
