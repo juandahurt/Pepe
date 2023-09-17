@@ -38,7 +38,7 @@ public class LogModifier: Equatable {
     }
 }
 
-// MARK: - Hi modifier
+// MARK: - Default modifier
 public class PepeModifier: LogModifier {
     override func modify(_ log: inout Log) {
         log.message = "🐸: \(log.message)"

@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct Log {
+public struct Log {
     /// Message to be logged.
-    var message: String
+    public var message: String
     
     /// How importante the log is.
-    let level: LogLevel
+    public let level: LogLevel
     
     /// The time when the message is logged.
     let date: Date
