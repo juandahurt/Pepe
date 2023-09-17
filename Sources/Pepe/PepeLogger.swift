@@ -21,6 +21,10 @@ public struct PepeLogger {
     /// How the log operation will be executed.
     public var executionType: ExecutionType
     
+    /// It allows you to observe the logger. Note that the `executionType` is attatched not only to the
+    /// logging itself but also to this observer.
+    public var observer: LoggerObserver?
+    
     /// Internal property to allow syncronous execution.
     private let _lock = NSRecursiveLock()
     
@@ -55,6 +59,15 @@ public struct PepeLogger {
         modifiers.reversed().forEach {
             $0.modify(&log)
         }
+        observer?.willLog(log: log)
         writer.write(message: log.message)
     }
+}
+
+
+/// This protocol allows you to observe the logger.
+public protocol LoggerObserver {
+    /// It notifies the observer that a message is about to be logged.
+    /// - Parameter log: Object that contains the log itself.
+    func willLog(log: Log)
 }

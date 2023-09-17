@@ -32,4 +32,23 @@ final class PepeLoggerTests: XCTestCase {
         let interval = end.timeIntervalSinceReferenceDate - start.timeIntervalSinceReferenceDate
         XCTAssertTrue(interval < reasonableTime)
     }
+    
+    func testLogging_withObserver_logCountShouldBeEqualToExpected() {
+        var logger = Pepe.loggerPlease()
+        let mockObserver = MockObserver()
+        logger.observer = mockObserver
+        logger.log("Hello")
+        logger.log("World!")
+        XCTAssertEqual(mockObserver.logCount, 2)
+    }
+}
+
+
+// MARK: Helpers
+internal class MockObserver: LoggerObserver {
+    var logCount = 0
+    
+    func willLog(log: Log) {
+        logCount += 1
+    }
 }
