@@ -17,16 +17,16 @@ public class LogModifier: Equatable {
     }
     
     /// Modifier that adds the log level to the message.
-    static let level = LevelModifier()
+    public static let level = LevelModifier()
     
     /// Modifier that adds the current time to the message.
-    static let time = TimeModifier()
+    public static let time = TimeModifier()
     
     /// The default modifier.
-    static let pepe = PepeModifier()
+    public static let pepe = PepeModifier()
     
     /// Modifier that adds the file from where the log was called.
-    static let file = FileModifier()
+    public static let file = FileModifier()
     
     /// Modifies a certain massage.
     /// - Parameters:
