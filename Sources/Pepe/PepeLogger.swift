@@ -60,7 +60,7 @@ public struct PepeLogger {
             $0.modify(&log)
         }
         observer?.willLog(log: log)
-        writer.write(message: log.message)
+        writer.write(message: log.message, level: level)
     }
 }
 
