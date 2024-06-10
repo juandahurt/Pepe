@@ -31,7 +31,7 @@ public class Writer: Equatable {
     
     /// Writes a message.
     /// - Parameter message: Message to be written.
-    internal func write(message: String) {
+    func write(message: String, level: LogLevel) {
         assert(false, "unreachable")
     }
     
@@ -41,19 +41,28 @@ public class Writer: Equatable {
 }
 
 public class ConsoleWriter: Writer {
-    override func write(message: String) {
+    override func write(message: String, level: LogLevel) {
         print(message)
     }
 }
 
 public class OSWriter: Writer {
-    private let osLog: OSLog
+    private let logger: Logger
     
-    internal init(subsystem: String, category: String) {
-        osLog = OSLog(subsystem: subsystem, category: category)
+    init(subsystem: String, category: String) {
+        logger = .init(subsystem: subsystem, category: category)
     }
     
-    override func write(message: String) {
-        os_log("%@", log: osLog, message)
+    override func write(message: String, level: LogLevel) {
+        switch level {
+        case .info:
+            logger.info("\(message)")
+        case .debug:
+            logger.debug("\(message)")
+        case .warning:
+            logger.warning("\(message)")
+        case .error:
+            logger.error("\(message)")
+        }
     }
 }

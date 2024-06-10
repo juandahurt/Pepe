@@ -59,6 +59,7 @@ class AppState: ObservableObject {
     
     init() {
         logger.modifiers = [.pepe]
+        logger.writer = .os(subsystem: "subsystem", category: "category")
     }
     
     private func updateModifiers() {
